@@ -33,6 +33,13 @@
 
 		$mysqli->query("UPDATE `users` SET `password`='".$password."' WHERE `login` = '".$login."'");
 
+		$Ip = $_SERVER['REMOTE_ADDR'];
+		$Date = date("Y-m-d H:i:s");
+
+		$SqlLog = "INSERT INTO `logs` (`Ip`, `IdUser`, `Date`, `TimeOnline`, `Event`) ".
+		          "VALUES ('{$Ip}', {$id}, '{$Date}', '00:00:00', 'Пользователь {$login} успешно восстановил пароль.')";
+		$mysqli->query($SqlLog);
+
 		echo("Ваш пароль был только что изменён. Новый пароль: ".$password);
 	}
 ?>

@@ -13,6 +13,8 @@
 			if($user_to_read[0] == 1) header("Location: login.php");
 		}
  	} else header("Location: login.php");
+	
+	include("./settings/session.php");
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -42,7 +44,7 @@
 				<input type="button" class="button" value="Выйти" onclick="logout()"/>
 				<div class="name" style="padding-bottom: 0px;">Личный кабинет</div>
 				<div class="description">Добро пожаловать: 
-				<?php
+					<?php
 						$user_to_query = $mysqli->query("SELECT * FROM `users` WHERE `id` = ".$_SESSION['user']);
 						$user_to_read = $user_to_query->fetch_row();
 						
@@ -51,6 +53,21 @@
 					<br>Ваш идентификатор:
 					<?php
 						echo $user_to_read[0];
+					?>
+					<?php
+						$Sql = "SELECT * FROM `session` WHERE `IdUser` = {$_SESSION["user"]} ORDER BY `DateStart` DESC;";
+						$Query = $mysqli->query($Sql);
+
+						if($Query->num_rows > 1) {
+							$Read = $Query->fetch_assoc();
+							$Read = $Query->fetch_assoc();
+
+							$TimeEnd = strtotime($Read["DateNow"]);
+							$TimeNow = time();
+
+							$TimeDelta = round(($TimeNow - $TimeEnd) / 60);
+							echo "<br>Последняя активная сессия была: {$TimeDelta} минут назад";
+						}
 					?>
 				</div>
 			
